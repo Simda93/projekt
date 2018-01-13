@@ -48,16 +48,17 @@ for i in range(data.shape[0]):
     add_to_dict(obciVOkrese,key,obec)
     increment_dict(okrskovVObci,obec)
 
-def do_geocode(address):
+def do_geocode(address,geo,i):
     try:
         return geolocator.geocode(address)
-    except Exception:
+    except Exception as exc:
+        print(exc)
+        np.savetxt("geolocation_gain"+str(i)+".csv", geoInfo, fmt='%s')
         print("waiting for geopy")
         time.sleep(5)
-        return do_geocode(address)
-
+        return do_geocode(address,geoInfo,i)
 geoInfo = []
-location = geolocator.geocode("")
+location = do_geocode("Vieden",geoInfo,0)
 minula_obec = ""
 for i in range(data.shape[0]):
     row = data[i, :]
@@ -73,8 +74,8 @@ for i in range(data.shape[0]):
     data[i,7]=len(obciVOkrese[key])
     data[i,8] = okrskovVObci[obec]
     if(minula_obec != str(obec)):
-        time.sleep(1.1)
-        location = do_geocode(str(obec)+" , Slovakia")
+        time.sleep(1.5)
+        location = do_geocode(str(obec)+" , Slovakia",geoInfo,i)
         print(location.address)
     minula_obec=str(obec)
     data[i,18] =location.latitude
