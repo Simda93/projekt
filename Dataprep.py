@@ -1,12 +1,7 @@
+import time
 import numpy as np
 import pandas as pd
-from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
-from pathlib import Path
-import os
-import random
-import json
-import time
 
 geolocator = Nominatim()
 
@@ -30,6 +25,8 @@ key.remove(5992)   #Borovce pri piestanoch, volebna ucast bola 0
 key.remove(776)    #hlasy zo zahranicia
 data=data[key,:]
 
+
+#informacie o velkosti obvodov/okreso/krajov/...
 obvodovVKraji={}
 okresovVObvode={}
 obciVOkrese={}
